@@ -1,36 +1,48 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
 {
-    public float jumpForce;
-    public float moveSpeed;
-
-    Rigidbody rb;
-    Collider col;
-
-    private bool isOnGround;
+    private CharacterController controller;
+    private Vector3 playerVelocity;
+    private bool groundedPlayer;
+    public float playerSpeed = 2.0f;
+    public float jumpHeight = 1.0f;
+    public float gravityValue = -9.81f;
 
     private void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        col = GetComponent<Collider>();
+        controller = GetComponent<CharacterController>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        rb.Move(new Vector3(-1, 0, 0) * moveSpeed * Time.deltaTime + rb.position, Quaternion.identity);
+        groundedPlayer = controller.isGrounded;
 
-        if (Input.GetKeyDown(KeyCode.Space) && isOnGround)
+        if (groundedPlayer && playerVelocity.y < 0)
         {
-            rb.AddForce(Vector3.up * jumpForce);
+            playerVelocity.y = 0f;
         }
+
+        Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, 0);
+
+        controller.Move(move * Time.deltaTime * playerSpeed);
+
+        // Changes the height position of the player..
+        if (Input.GetButtonDown("Jump") && groundedPlayer)
+        {
+            playerVelocity.y += Mathf.Sqrt(jumpHeight * -3.0f * gravityValue);
+        }
+
+        playerVelocity.y += gravityValue * Time.deltaTime;
+
+        controller.Move(playerVelocity * Time.deltaTime);
     }
 
-    public void SetIsOnGround(bool isOnGround)
+    public void SetRotation(Quaternion quaternion)
     {
-        this.isOnGround = isOnGround;
+        transform.rotation = quaternion;
     }
 }
