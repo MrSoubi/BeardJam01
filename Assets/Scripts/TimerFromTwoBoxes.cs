@@ -21,6 +21,7 @@ public class TimerFromTwoBoxes : MonoBehaviour
 
     public void Go()
     {
+        delay = 0f;
         running = true;
     }
 

@@ -13,7 +13,7 @@ public class SongPlayer : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && !source.isPlaying)
+        if (other.CompareTag("Player"))
         {
             source.Play();
         }
