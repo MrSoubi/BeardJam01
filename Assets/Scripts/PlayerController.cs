@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
     private AudioSource playerAudioSource;
     public float timeOffset;
 
+    public float hitDistance;
+
+
     private Vector3 startPosition;
 
     private void Start()
